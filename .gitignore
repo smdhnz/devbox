@@ -1,0 +1,10 @@
+.devbox/
+.bun/
+.config/git/
+.config/nvim/undo/
+*.swp
+
+.gemini/*
+!.gemini/AGENTS.md
+!.gemini/settings.json
+.deleted/

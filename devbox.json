@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetpack-io/devbox/main/.schema/devbox.schema.json",
+  "packages": [
+    "neovim@latest",
+    "lazygit@latest",
+    "lazydocker@latest",
+    "nodejs@20",
+    "bun@latest",
+    "uv@latest"
+  ],
+  "env": {
+    "SHELL": "/bin/bash",
+    "EDITOR": "nvim",
+    "XDG_CONFIG_HOME": "$PWD/.config",
+    "GEMINI_CLI_HOME": "$PWD",
+    "BUN_INSTALL": "$PWD/.bun",
+    "DEVBOX_HOME": "$PWD"
+  },
+  "shell": {
+    "init_hook": [
+      "source .bash_aliases",
+      "source .bash_functions",
+      "export NO_BLOWSER=1",
+      "export PATH=\"$BUN_INSTALL/bin:$PATH\"",
+      "export PS1='\\[\\033[01;32m\\]\\u@devbox\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '",
+      "if [ ! -f \".config/git/config\" ]; then",
+      "  echo '📝 Git identity not found. Please set it for this workspace.'",
+      "  mkdir -p .config/git",
+      "  read -p 'Enter Git User Name: ' git_name",
+      "  read -p 'Enter Git User Email: ' git_email",
+      "  printf \"[user]\\n  name = %s\\n  email = %s\\n\" \"$git_name\" \"$git_email\" > .config/git/config",
+      "  echo '✅ Git identity saved to .config/git/config'",
+      "fi",
+      "if [ ! -d \"$BUN_INSTALL\" ]; then",
+      "  echo '📦 Installing global packages with bun into .bun directory...'",
+      "  bun install -g @google/gemini-cli typescript @vtsls/language-server @vue/language-server @fsouza/prettierd @tailwindcss/language-server shfmt",
+      "fi"
+    ],
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    }
+  }
+}
