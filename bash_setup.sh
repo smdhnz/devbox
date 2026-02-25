@@ -1,3 +1,12 @@
+# Load .env file if it exists
+if [ -f ".env" ]; then
+  echo '🔑 Loading environment variables from .env'
+  # Set -a to automatically export all variables
+  set -a
+  source .env
+  set +a
+fi
+
 # Git identity setup
 if [ ! -f ".config/git/config" ]; then
   echo '📝 Git identity not found. Please set it for this workspace.'
