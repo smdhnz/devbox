@@ -1,7 +1,9 @@
 .devbox/
 .bun/
-.config/git/
-.config/nvim/undo/
+.config/*
+!.config/nvim/
+.config/nvim/*
+!.config/nvim/init.lua
 *.swp
 
 .gemini/*
