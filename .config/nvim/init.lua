@@ -414,11 +414,11 @@ require("lazy").setup({
       vim.lsp.enable("tailwindcss")
 
       -- Typescript & Vue
-      -- Devbox + Bun 環境では .bun ディレクトリ内にインストールされる
+      -- Devbox + Volta 環境では .volta ディレクトリ内にインストールされる
       local function get_vue_plugin_path()
-        local bun_install = os.getenv("BUN_INSTALL")
-        if bun_install then
-          return bun_install .. "/install/global/node_modules/@vue/typescript-plugin/"
+        local volta_home = os.getenv("VOLTA_HOME")
+        if volta_home then
+          return volta_home .. "/tools/image/packages/@vue/language-server/lib/node_modules/@vue/typescript-plugin/"
         end
         return ""
       end

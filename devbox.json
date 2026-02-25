@@ -4,7 +4,7 @@
     "neovim@latest",
     "lazygit@latest",
     "lazydocker@latest",
-    "nodejs@20",
+    "volta@latest",
     "bun@latest",
     "uv@latest"
   ],
@@ -12,8 +12,16 @@
     "SHELL": "/bin/bash",
     "EDITOR": "nvim",
     "XDG_CONFIG_HOME": "$PWD/.config",
+    "XDG_DATA_HOME": "$PWD/.local/share",
+    "XDG_STATE_HOME": "$PWD/.local/state",
+    "XDG_CACHE_HOME": "$PWD/.cache",
     "GEMINI_CLI_HOME": "$PWD",
     "BUN_INSTALL": "$PWD/.bun",
+    "VOLTA_HOME": "$PWD/.volta",
+    "NPM_CONFIG_USERCONFIG": "$PWD/.config/npm/npmrc",
+    "NPM_CONFIG_CACHE": "$PWD/.cache/npm",
+    "YARN_CACHE_FOLDER": "$PWD/.cache/yarn",
+    "UV_CACHE_DIR": "$PWD/.cache/uv",
     "DEVBOX_HOME": "$PWD"
   },
   "shell": {
@@ -21,7 +29,7 @@
       "source .bash_aliases",
       "source .bash_functions",
       "export NO_BLOWSER=1",
-      "export PATH=\"$BUN_INSTALL/bin:$PATH\"",
+      "export PATH=\"$BUN_INSTALL/bin:$VOLTA_HOME/bin:$PATH\"",
       "export PS1='\\[\\033[01;32m\\]\\u@devbox\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '",
       "if [ ! -f \".config/git/config\" ]; then",
       "  echo '📝 Git identity not found. Please set it for this workspace.'",
@@ -31,13 +39,13 @@
       "  printf \"[user]\\n  name = %s\\n  email = %s\\n\" \"$git_name\" \"$git_email\" > .config/git/config",
       "  echo '✅ Git identity saved to .config/git/config'",
       "fi",
-      "if [ ! -d \"$BUN_INSTALL\" ]; then",
-      "  echo '📦 Installing global packages with bun into .bun directory...'",
-      "  bun install -g @google/gemini-cli typescript @vtsls/language-server @vue/language-server @fsouza/prettierd @tailwindcss/language-server shfmt",
+      "if [ ! -d \"$VOLTA_HOME/tools\" ]; then",
+      "  echo '📦 Installing node, yarn and global packages with volta...'",
+      "  volta install node@20",
+      "  volta install yarn@1.22.22",
+      "  volta install @google/gemini-cli typescript @vtsls/language-server @vue/language-server @fsouza/prettierd @tailwindcss/language-server shfmt",
       "fi"
     ],
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    }
+    "scripts": {}
   }
 }

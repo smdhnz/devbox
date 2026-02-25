@@ -1,5 +1,8 @@
 .devbox/
 .bun/
+.volta/
+.local/
+.cache/
 .config/*
 !.config/nvim/
 .config/nvim/*

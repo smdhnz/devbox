@@ -197,87 +197,6 @@
         }
       }
     },
-    "nodejs@20": {
-      "last_modified": "2026-02-13T23:34:13Z",
-      "plugin_version": "0.0.2",
-      "resolved": "github:NixOS/nixpkgs/7d2ae6d8b8b697b5114a4249d0d958ee5f23d8fe#nodejs_20",
-      "source": "devbox-search",
-      "version": "20.20.0",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/lpxs72iagg4hxnd8swgpvaiajgpdiaiv-nodejs-20.20.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/ffv0m7yqk3zdrjcbz030l5h4drd3qpxi-nodejs-20.20.0-dev"
-            },
-            {
-              "name": "libv8",
-              "path": "/nix/store/na6qprgp6izbr2acc67rv45i8f567c61-nodejs-20.20.0-libv8"
-            }
-          ],
-          "store_path": "/nix/store/lpxs72iagg4hxnd8swgpvaiajgpdiaiv-nodejs-20.20.0"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/j99h1wchrxq7yjgsgdfzpb471gd9ffzz-nodejs-20.20.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/sj3dkxdbgi6aw7bdw3y4g6f1p3167mzi-nodejs-20.20.0-dev"
-            },
-            {
-              "name": "libv8",
-              "path": "/nix/store/w43cfcpz1d205xwixvyb0wnrq62nfs5r-nodejs-20.20.0-libv8"
-            }
-          ],
-          "store_path": "/nix/store/j99h1wchrxq7yjgsgdfzpb471gd9ffzz-nodejs-20.20.0"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/93b8p46bmm8qrwymi6aw99h8n0nnni03-nodejs-20.20.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/gafdza0dkjvhqsx0xlmi1wsgw1ha6ash-nodejs-20.20.0-dev"
-            },
-            {
-              "name": "libv8",
-              "path": "/nix/store/0g5s1xy86aqbi1cfa35z63rak73hki6y-nodejs-20.20.0-libv8"
-            }
-          ],
-          "store_path": "/nix/store/93b8p46bmm8qrwymi6aw99h8n0nnni03-nodejs-20.20.0"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/mcy5n3l8z7dbvaic7kgh80b86xj7smkn-nodejs-20.20.0",
-              "default": true
-            },
-            {
-              "name": "dev",
-              "path": "/nix/store/p6c5l3l0p5cymnzybcyil9dqbiymi6ly-nodejs-20.20.0-dev"
-            },
-            {
-              "name": "libv8",
-              "path": "/nix/store/7sljbl366m4vlf79va6l4441j1qmpjax-nodejs-20.20.0-libv8"
-            }
-          ],
-          "store_path": "/nix/store/mcy5n3l8z7dbvaic7kgh80b86xj7smkn-nodejs-20.20.0"
-        }
-      }
-    },
     "uv@latest": {
       "last_modified": "2026-02-11T12:16:34Z",
       "resolved": "github:NixOS/nixpkgs/8482c7ded03bae7550f3d69884f1e611e3bd19e8#uv",
@@ -323,6 +242,54 @@
             }
           ],
           "store_path": "/nix/store/ksi4jmfapiqnk1lclzlf2hrdj6s1rzjs-uv-0.10.2"
+        }
+      }
+    },
+    "volta@latest": {
+      "last_modified": "2026-01-23T17:20:52Z",
+      "resolved": "github:NixOS/nixpkgs/a1bab9e494f5f4939442a57a58d0449a109593fe#volta",
+      "source": "devbox-search",
+      "version": "2.0.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/zhy5a1ws4k6h8wz76yc0v36iz0vvfdd9-volta-2.0.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/zhy5a1ws4k6h8wz76yc0v36iz0vvfdd9-volta-2.0.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0n9r3i9jgl2kp97d96mxkkl0lgssd2l3-volta-2.0.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0n9r3i9jgl2kp97d96mxkkl0lgssd2l3-volta-2.0.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/l8vzj5ckzxccqpz7fdkm939y8s63csli-volta-2.0.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/l8vzj5ckzxccqpz7fdkm939y8s63csli-volta-2.0.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/yd10rcb4fih26b7g2gm5cx53my4i1jmw-volta-2.0.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/yd10rcb4fih26b7g2gm5cx53my4i1jmw-volta-2.0.2"
         }
       }
     }
