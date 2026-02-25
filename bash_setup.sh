@@ -16,5 +16,12 @@ if [ ! -d "$VOLTA_HOME/tools" ]; then
   echo '📦 Installing node, yarn and global packages with volta...'
   volta install node@20
   volta install yarn@1.22.22
-  volta install @google/gemini-cli typescript @vtsls/language-server @vue/language-server @fsouza/prettierd @tailwindcss/language-server shfmt
+  volta install \
+    @google/gemini-cli \
+    typescript \
+    @vtsls/language-server \
+    @vue/language-server \
+    @fsouza/prettierd \
+    @tailwindcss/language-server \
+    shfmt
 fi
