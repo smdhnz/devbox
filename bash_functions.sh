@@ -1,264 +1,273 @@
 # Git branch synchronization
 br-sync() {
-  if ! command -v git >/dev/null 2>&1; then
-    echo "❌ git is not installed."
-    return 1
-  fi
+	if ! command -v git >/dev/null 2>&1; then
+		echo "❌ git is not installed."
+		return 1
+	fi
 
-  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    echo "⚠️  Not inside a Git repository."
-    return 1
-  fi
+	if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		echo "⚠️  Not inside a Git repository."
+		return 1
+	fi
 
-  if [ -z "$1" ]; then
-    local branch_name
-    branch_name=$(git rev-parse --abbrev-ref HEAD)
-    echo "==> Forcing current branch '$branch_name' to match origin/$branch_name"
-    git stash push -m "WIP: br-sync auto-stash"
-    git fetch origin
-    git reset --hard "origin/$branch_name"
-    git stash pop
-  else
-    local target_branch="$1"
-    echo "==> Forcing branch '$target_branch' to match origin/$target_branch"
-    git fetch origin
-    git branch -f "$target_branch" "origin/$target_branch"
-  fi
+	if [ -z "$1" ]; then
+		local branch_name
+		branch_name=$(git rev-parse --abbrev-ref HEAD)
+		echo "==> Forcing current branch '$branch_name' to match origin/$branch_name"
+		git stash push -m "WIP: br-sync auto-stash"
+		git fetch origin
+		git reset --hard "origin/$branch_name"
+		git stash pop
+	else
+		local target_branch="$1"
+		echo "==> Forcing branch '$target_branch' to match origin/$target_branch"
+		git fetch origin
+		git branch -f "$target_branch" "origin/$target_branch"
+	fi
 }
 
 # Python virtual environment activator (using uv)
 activate() {
-  local dir="$PWD"
-  while [ "$dir" != "/" ]; do
-    if [ -f "$dir/.venv/bin/activate" ]; then
-      source "$dir/.venv/bin/activate"
-      return
-    fi
-    dir=$(dirname "$dir")
-  done
+	local dir="$PWD"
+	while [ "$dir" != "/" ]; do
+		if [ -f "$dir/.venv/bin/activate" ]; then
+			source "$dir/.venv/bin/activate"
+			return
+		fi
+		dir=$(dirname "$dir")
+	done
 
-  if ! command -v uv >/dev/null 2>&1; then
-    echo "❌ uv is not installed. Cannot create venv."
-    return 1
-  fi
+	if ! command -v uv >/dev/null 2>&1; then
+		echo "❌ uv is not installed. Cannot create venv."
+		return 1
+	fi
 
-  echo "==> Creating new venv with uv..."
-  uv venv && source .venv/bin/activate && uv pip install isort black pyright
+	echo "==> Creating new venv with uv..."
+	uv venv && source .venv/bin/activate && uv pip install isort black pyright
 }
 
 # Simple directory tree view
 tree() {
-  local target_dir="${1:-.}"
-  local exclude_dirs=("node_modules" "dist" "build" ".venv" "__pycache__" ".git")
+	local target_dir="${1:-.}"
+	local exclude_dirs=("node_modules" "dist" "build" ".venv" "__pycache__" ".git")
 
-  is_excluded() {
-    local name="$1"
-    for exclude in "${exclude_dirs[@]}"; do
-      if [[ "$name" == "$exclude" ]]; then return 0; fi
-    done
-    return 1
-  }
+	is_excluded() {
+		local name="$1"
+		for exclude in "${exclude_dirs[@]}"; do
+			if [[ "$name" == "$exclude" ]]; then return 0; fi
+		done
+		return 1
+	}
 
-  generate_tree() {
-    local dir="$1"
-    local prefix="$2"
-    local entries=()
+	generate_tree() {
+		local dir="$1"
+		local prefix="$2"
+		local entries=()
 
-    while IFS= read -r -d $'\0' entry; do
-      entries+=("$entry")
-    done < <(find "$dir" -mindepth 1 -maxdepth 1 ! -name ".*" -print0 | sort -z)
+		while IFS= read -r -d $'\0' entry; do
+			entries+=("$entry")
+		done < <(find "$dir" -mindepth 1 -maxdepth 1 ! -name ".*" -print0 | sort -z)
 
-    local count=${#entries[@]}
-    for i in "${!entries[@]}"; do
-      local path="${entries[$i]}"
-      local name
-      name=$(basename "$path")
-      local connector="├──"
-      local new_prefix="$prefix│   "
+		local count=${#entries[@]}
+		for i in "${!entries[@]}"; do
+			local path="${entries[$i]}"
+			local name
+			name=$(basename "$path")
+			local connector="├──"
+			local new_prefix="$prefix│   "
 
-      if [ "$i" -eq "$((count - 1))" ]; then
-        connector="└──"
-        new_prefix="$prefix    "
-      fi
+			if [ "$i" -eq "$((count - 1))" ]; then
+				connector="└──"
+				new_prefix="$prefix    "
+			fi
 
-      if [ -d "$path" ]; then
-        echo "${prefix}${connector} ${name}/"
-        if ! is_excluded "$name"; then
-          generate_tree "$path" "$new_prefix"
-        fi
-      else
-        echo "${prefix}${connector} ${name}"
-      fi
-    done
-  }
+			if [ -d "$path" ]; then
+				echo "${prefix}${connector} ${name}/"
+				if ! is_excluded "$name"; then
+					generate_tree "$path" "$new_prefix"
+				fi
+			else
+				echo "${prefix}${connector} ${name}"
+			fi
+		done
+	}
 
-  echo "$(basename "$target_dir")/"
-  generate_tree "$target_dir" ""
+	echo "$(basename "$target_dir")/"
+	generate_tree "$target_dir" ""
 }
 
 # Concatenate files with markdown formatting
 xcat() {
-  local exclude_dirs=(".venv" "node_modules" "dist" ".git" "__pycache__" "test" ".DS_Store" ".idea" ".vscode")
-  local target_paths=()
-  local extensions=""
+	local exclude_dirs=(".venv" "node_modules" "dist" ".git" "__pycache__" "test" ".DS_Store" ".idea" ".vscode")
+	local target_paths=()
+	local extensions=""
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --exp) extensions="$2"; shift 2 ;;
-      *) target_paths+=("$1"); shift ;;
-    esac
-  done
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--exp)
+			extensions="$2"
+			shift 2
+			;;
+		*)
+			target_paths+=("$1")
+			shift
+			;;
+		esac
+	done
 
-  if [[ ${#target_paths[@]} -eq 0 ]]; then
-    echo "Usage: xcat <path1> [path2...] [--exp <ext1,ext2...>]"
-    return 1
-  fi
+	if [[ ${#target_paths[@]} -eq 0 ]]; then
+		echo "Usage: xcat <path1> [path2...] [--exp <ext1,ext2...>]"
+		return 1
+	fi
 
-  print_formatted() {
-    local file="$1"
-    echo "[$file]"
-    local ext="${file##*.}"
-    [[ "$file" == "$ext" ]] && ext=""
-    echo '```'"$ext"
-    cat "$file"
-    echo '```'
-    echo ""
-  }
+	print_formatted() {
+		local file="$1"
+		echo "[$file]"
+		local ext="${file##*.}"
+		[[ "$file" == "$ext" ]] && ext=""
+		echo '```'"$ext"
+		cat "$file"
+		echo '```'
+		echo ""
+	}
 
-  local find_opts=()
-  for dir in "${exclude_dirs[@]}"; do
-    find_opts+=(! -path "*/$dir/*")
-  done
+	local find_opts=()
+	for dir in "${exclude_dirs[@]}"; do
+		find_opts+=(! -path "*/$dir/*")
+	done
 
-  if [[ -n "$extensions" ]]; then
-    local ext_args=()
-    ext_args+=(\()
-    IFS=',' read -ra ADDR <<< "$extensions"
-    local is_first=true
-    for ext in "${ADDR[@]}"; do
-      if [ "$is_first" = true ]; then is_first=false; else ext_args+=(-o); fi
-      ext_args+=(-name "*.$ext")
-    done
-    ext_args+=(\))
-    find_opts+=("${ext_args[@]}")
-  fi
+	if [[ -n "$extensions" ]]; then
+		local ext_args=()
+		ext_args+=(\()
+		IFS=',' read -ra ADDR <<<"$extensions"
+		local is_first=true
+		for ext in "${ADDR[@]}"; do
+			if [ "$is_first" = true ]; then is_first=false; else ext_args+=(-o); fi
+			ext_args+=(-name "*.$ext")
+		done
+		ext_args+=(\))
+		find_opts+=("${ext_args[@]}")
+	fi
 
-  find "${target_paths[@]}" -type f "${find_opts[@]}" 2>/dev/null | while read -r file; do
-    print_formatted "$file"
-  done
+	find "${target_paths[@]}" -type f "${find_opts[@]}" 2>/dev/null | while read -r file; do
+		print_formatted "$file"
+	done
 }
 
 # Fix file and directory permissions
 fixperms() {
-  local target="${1:-.}"
-  local exclude_dirs=(".venv" ".git")
-  local find_cmd=("find" "$target")
+	local target="${1:-.}"
+	local exclude_dirs=(".venv" ".git")
+	local find_cmd=("find" "$target")
 
-  for dir in "${exclude_dirs[@]}"; do
-    find_cmd+=(-path "*/$dir" -prune -o)
-  done
+	for dir in "${exclude_dirs[@]}"; do
+		find_cmd+=(-path "*/$dir" -prune -o)
+	done
 
-  # Correctly build the find command to apply chmod
-  "${find_cmd[@]}" -type d -exec chmod 755 {} +
-  "${find_cmd[@]}" -type f -exec chmod 644 {} +
+	# Correctly build the find command to apply chmod
+	"${find_cmd[@]}" -type d -exec chmod 755 {} +
+	"${find_cmd[@]}" -type f -exec chmod 644 {} +
 }
 
 # Move files to a daily trash directory
 del() {
-  local trash_root="${DEVBOX_HOME:-$HOME}/.deleted"
-  local today
-  today=$(date +%Y-%m-%d)
-  local trash_dir="$trash_root/$today"
+	local trash_root="${DEVBOX_HOME:-$HOME}/.deleted"
+	local today
+	today=$(date +%Y-%m-%d)
+	local trash_dir="$trash_root/$today"
 
-  mkdir -p "$trash_dir"
+	mkdir -p "$trash_dir"
 
-  # Clean up old trash (older than 7 days)
-  if [ -d "$trash_root" ]; then
-    find "$trash_root" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} +
-  fi
+	# Clean up old trash (older than 7 days)
+	if [ -d "$trash_root" ]; then
+		find "$trash_root" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} +
+	fi
 
-  if [ $# -eq 0 ]; then
-    echo "Usage: del <file_or_dir> ..."
-    return 1
-  fi
+	if [ $# -eq 0 ]; then
+		echo "Usage: del <file_or_dir> ..."
+		return 1
+	fi
 
-  for item in "$@"; do
-    [[ "$item" == -* ]] && continue
-    if [ -e "$item" ]; then
-      local base_name
-      base_name=$(basename "$item")
-      local dest="$trash_dir/$base_name"
-      if [ -e "$dest" ]; then
-        dest="${dest}_$(date +%H%M%S)"
-      fi
-      mv "$item" "$dest"
-      echo "Moved to trash: $item"
-    else
-      echo "del: $item: No such file or directory"
-    fi
-  done
+	for item in "$@"; do
+		[[ "$item" == -* ]] && continue
+		if [ -e "$item" ]; then
+			local base_name
+			base_name=$(basename "$item")
+			local dest="$trash_dir/$base_name"
+			if [ -e "$dest" ]; then
+				dest="${dest}_$(date +%H%M%S)"
+			fi
+			mv "$item" "$dest"
+			echo "Moved to trash: $item"
+		else
+			echo "del: $item: No such file or directory"
+		fi
+	done
 }
 
 # Send message or file to Discord via Webhook
 discord() {
-  local webhook_url="https://discord.com/api/webhooks/1430739694852898838/WoI7GIB7uM3PWTyN4FqPiBsHby_B-0RSwDRODq14Uds7FPOtJFcmW5NInOxsjVwowh8Q"
+	local webhook_url="https://discord.com/api/webhooks/1430739694852898838/WoI7GIB7uM3PWTyN4FqPiBsHby_B-0RSwDRODq14Uds7FPOtJFcmW5NInOxsjVwowh8Q"
 
-  if ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
-    echo "❌ curl and jq are required."
-    return 1
-  fi
+	if ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+		echo "❌ curl and jq are required."
+		return 1
+	fi
 
-  # Handle pipe input
-  if [ ! -t 0 ]; then
-    local content
-    content=$(cat)
-    local escaped
-    escaped=$(printf '%s' "$content" | jq -Rs .)
-    curl -s -H "Content-Type: application/json" -X POST -d "{\"content\": $escaped}" "$webhook_url" > /dev/null
-    return
-  fi
+	# Handle pipe input
+	if [ ! -t 0 ]; then
+		local content
+		content=$(cat)
+		local escaped
+		escaped=$(printf '%s' "$content" | jq -Rs .)
+		curl -s -H "Content-Type: application/json" -X POST -d "{\"content\": $escaped}" "$webhook_url" >/dev/null
+		return
+	fi
 
-  # Handle file upload
-  if [ "$1" = "-f" ]; then
-    local file="$2"
-    if [ ! -f "$file" ]; then
-      echo "❌ File not found: $file"
-      return 1
-    fi
+	# Handle file upload
+	if [ "$1" = "-f" ]; then
+		local file="$2"
+		if [ ! -f "$file" ]; then
+			echo "❌ File not found: $file"
+			return 1
+		fi
 
-    if [ "$3" = "-e" ]; then
-      if ! command -v gpg >/dev/null 2>&1; then echo "❌ gpg is required."; return 1; fi
-      local passphrase="$4"
-      local enc_file="${file}.gpg"
-      gpg --batch --yes --quiet --passphrase "$passphrase" -c "$file"
-      curl -s -X POST -F "file=@${enc_file}" "$webhook_url" > /dev/null
-      rm -f "$enc_file"
-    else
-      curl -s -X POST -F "file=@${file}" "$webhook_url" > /dev/null
-    fi
-    return
-  fi
+		if [ "$3" = "-e" ]; then
+			if ! command -v gpg >/dev/null 2>&1; then
+				echo "❌ gpg is required."
+				return 1
+			fi
+			local passphrase="$4"
+			local enc_file="${file}.gpg"
+			gpg --batch --yes --quiet --passphrase "$passphrase" -c "$file"
+			curl -s -X POST -F "file=@${enc_file}" "$webhook_url" >/dev/null
+			rm -f "$enc_file"
+		else
+			curl -s -X POST -F "file=@${file}" "$webhook_url" >/dev/null
+		fi
+		return
+	fi
 
-  # Handle text message
-  if [ $# -eq 0 ]; then
-    echo "Usage: discord <message> | discord -f <file> [-e <passphrase>] | echo 'msg' | discord"
-    return 1
-  fi
+	# Handle text message
+	if [ $# -eq 0 ]; then
+		echo "Usage: discord <message> | discord -f <file> [-e <passphrase>] | echo 'msg' | discord"
+		return 1
+	fi
 
-  local content="$*"
-  local escaped
-  escaped=$(printf '%s' "$content" | jq -Rs .)
-  curl -s -H "Content-Type: application/json" -X POST -d "{\"content\": $escaped}" "$webhook_url" > /dev/null
+	local content="$*"
+	local escaped
+	escaped=$(printf '%s' "$content" | jq -Rs .)
+	curl -s -H "Content-Type: application/json" -X POST -d "{\"content\": $escaped}" "$webhook_url" >/dev/null
 }
 
 # Copy to clipboard via OSC 52
 clip() {
-  local input
-  if [ -t 0 ]; then
-    input="$*"
-  else
-    input=$(cat)
-  fi
-  [ -z "$input" ] && return
-  printf "\033]52;c;$(printf "%s" "$input" | base64 | tr -d '\n')\a"
+	local input
+	if [ -t 0 ]; then
+		input="$*"
+	else
+		input=$(cat)
+	fi
+	[ -z "$input" ] && return
+	printf "\033]52;c;$(printf "%s" "$input" | base64 | tr -d '\n')\a"
 }

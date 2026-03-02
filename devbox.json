@@ -6,23 +6,25 @@
     "lazydocker@latest",
     "volta@latest",
     "bun@latest",
-    "uv@latest"
+    "uv@latest",
+    "shfmt@latest"
   ],
   "env": {
-    "SHELL": "/bin/bash",
-    "EDITOR": "nvim",
-    "DEVBOX_HOME": "$PWD",
-    "XDG_CONFIG_HOME": "$PWD/.config",
-    "XDG_DATA_HOME": "$PWD/.local/share",
-    "XDG_STATE_HOME": "$PWD/.local/state",
-    "XDG_CACHE_HOME": "$PWD/.cache",
-    "GEMINI_CLI_HOME": "$PWD",
-    "BUN_INSTALL": "$PWD/.bun",
-    "VOLTA_HOME": "$PWD/.volta",
+    "SHELL":                 "/bin/bash",
+    "EDITOR":                "nvim",
+    "COLORTERM":             "truecolor",
+    "DEVBOX_HOME":           "$PWD",
+    "XDG_CONFIG_HOME":       "$PWD/.config",
+    "XDG_DATA_HOME":         "$PWD/.local/share",
+    "XDG_STATE_HOME":        "$PWD/.local/state",
+    "XDG_CACHE_HOME":        "$PWD/.cache",
+    "GEMINI_CLI_HOME":       "$PWD",
+    "BUN_INSTALL":           "$PWD/.bun",
+    "VOLTA_HOME":            "$PWD/.volta",
     "NPM_CONFIG_USERCONFIG": "$PWD/.config/npm/npmrc",
-    "NPM_CONFIG_CACHE": "$PWD/.cache/npm",
-    "YARN_CACHE_FOLDER": "$PWD/.cache/yarn",
-    "UV_CACHE_DIR": "$PWD/.cache/uv"
+    "NPM_CONFIG_CACHE":      "$PWD/.cache/npm",
+    "YARN_CACHE_FOLDER":     "$PWD/.cache/yarn",
+    "UV_CACHE_DIR":          "$PWD/.cache/uv"
   },
   "shell": {
     "init_hook": [
