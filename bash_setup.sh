@@ -30,5 +30,6 @@ if [ ! -d "$VOLTA_HOME/tools" ]; then
 		@vtsls/language-server \
 		@vue/language-server \
 		@fsouza/prettierd \
-		@tailwindcss/language-server
+		@tailwindcss/language-server \
+		wsl-open
 fi

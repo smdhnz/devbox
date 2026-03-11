@@ -7,7 +7,21 @@
     "volta@latest",
     "bun@latest",
     "uv@latest",
-    "shfmt@latest"
+    "shfmt@latest",
+    "ripgrep@latest",
+    "fd@latest",
+    "fzf@latest",
+    "gcc@latest",
+    "gnumake@latest",
+    "binutils@latest",
+    "gnupg@latest",
+    "jq@latest",
+    "unzip@latest",
+    "pkg-config@latest",
+    "zlib@latest",
+    "openssl@latest",
+    "bzip2@latest",
+    "sqlite@latest"
   ],
   "env": {
     "SHELL": "/bin/bash",
