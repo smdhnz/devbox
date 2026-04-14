@@ -12,5 +12,9 @@
 .gemini/*
 !.gemini/AGENTS.md
 !.gemini/settings.json
+
+.claude/*
+!.claude/CLAUDE.md
+!.claude/settings.json
 .deleted/
 .env

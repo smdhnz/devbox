@@ -35,6 +35,7 @@
     "GEMINI_CLI_HOME": "$PWD",
     "BUN_INSTALL": "$PWD/.bun",
     "VOLTA_HOME": "$PWD/.volta",
+    "CLAUDE_CONFIG_DIR": "$PWD/.claude",
     "NPM_CONFIG_USERCONFIG": "$PWD/.config/npm/npmrc",
     "NPM_CONFIG_CACHE": "$PWD/.cache/npm",
     "YARN_CACHE_FOLDER": "$PWD/.cache/yarn",
@@ -42,7 +43,7 @@
   },
   "shell": {
     "init_hook": [
-      "export PATH=\"$BUN_INSTALL/bin:$VOLTA_HOME/bin:$PATH\"",
+      "export PATH=\"$CLAUDE_CONFIG_DIR/local/bin:$BUN_INSTALL/bin:$VOLTA_HOME/bin:$PATH\"",
       "export PS1='\\[\\033[01;32m\\]\\u@\\[\\033[01;35m\\]devbox\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '",
       "source bash_aliases.sh",
       "source bash_functions.sh",

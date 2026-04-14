@@ -33,3 +33,9 @@ if [ ! -d "$VOLTA_HOME/tools" ]; then
 		@tailwindcss/language-server \
 		wsl-open
 fi
+
+# Claude Code native installation
+if ! command -v claude &>/dev/null; then
+	echo '📦 Installing Claude Code...'
+	curl -fsSL https://claude.ai/install.sh | bash
+fi
