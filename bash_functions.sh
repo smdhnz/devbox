@@ -180,7 +180,8 @@ del() {
 
 	# Clean up old trash (older than 7 days)
 	if [ -d "$trash_root" ]; then
-		find "$trash_root" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} +
+		find "$trash_root" -maxdepth 1 -type d -mtime +7 -exec chmod -R u+rw {} + 2>/dev/null
+		find "$trash_root" -maxdepth 1 -type d -mtime +7 -exec rm -rf {} + 2>/dev/null
 	fi
 
 	if [ $# -eq 0 ]; then
@@ -197,8 +198,12 @@ del() {
 			if [ -e "$dest" ]; then
 				dest="${dest}_$(date +%H%M%S)"
 			fi
-			mv "$item" "$dest"
-			echo "Moved to trash: $item"
+			chmod -R u+rw "$item" 2>/dev/null
+			if mv "$item" "$dest" 2>/dev/null; then
+				echo "Moved to trash: $item"
+			else
+				echo "del: $item: Permission denied (try sudo)"
+			fi
 		else
 			echo "del: $item: No such file or directory"
 		fi

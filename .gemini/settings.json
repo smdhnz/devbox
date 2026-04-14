@@ -1,7 +1,6 @@
 {
   "general": {
     "preferredEditor": "nvim",
-    "disableAutoUpdate": true,
     "previewFeatures": true,
     "enableAutoUpdate": false,
     "allowHomeDirectory": true,
@@ -9,6 +8,9 @@
       "enabled": true,
       "maxAge": "30d",
       "warningAcknowledged": true
+    },
+    "plan": {
+      "enabled": true
     }
   },
   "ui": {
@@ -33,7 +35,9 @@
     }
   },
   "experimental": {
-    "plan": true,
     "enableAgents": true
+  },
+  "agents": {
+    "overrides": {}
   }
 }
