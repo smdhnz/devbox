@@ -5,3 +5,4 @@ alias rm='del'
 alias lg="lazygit"
 alias ld="lazydocker"
 alias open="wsl-open"
+alias time-sync="sudo hwclock -s"

@@ -32,6 +32,7 @@ activate() {
 	while [ "$dir" != "/" ]; do
 		if [ -f "$dir/.venv/bin/activate" ]; then
 			source "$dir/.venv/bin/activate"
+			unset PYTHONPATH
 			return
 		fi
 		dir=$(dirname "$dir")
@@ -43,7 +44,7 @@ activate() {
 	fi
 
 	echo "==> Creating new venv with uv..."
-	uv venv && source .venv/bin/activate && uv pip install isort black pyright
+	uv venv && source .venv/bin/activate && unset PYTHONPATH && uv pip install isort black pyright
 }
 
 # Simple directory tree view
