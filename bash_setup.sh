@@ -19,20 +19,30 @@ if [ ! -f ".config/git/config" ]; then
 	echo '✅ Git identity saved to .config/git/config'
 fi
 
-# Volta package installation
+# Volta installation (node and yarn only)
 if [ ! -d "$VOLTA_HOME/tools" ]; then
-	echo '📦 Installing node, yarn and global packages with volta...'
+	echo '📦 Installing node and yarn with volta...'
 	volta install node@20
 	volta install yarn@1.22.22
-	volta install \
-		@google/gemini-cli \
-		typescript \
-		@vtsls/language-server \
-		@vue/language-server \
-		@fsouza/prettierd \
-		@tailwindcss/language-server \
-		wsl-open
 fi
+
+# Global package installation with bun
+BUN_GLOBAL="$BUN_INSTALL/install/global"
+packages=(
+	typescript
+	@vtsls/language-server
+	@vue/language-server
+	@fsouza/prettierd
+	@tailwindcss/language-server
+	@google/gemini-cli
+	wsl-open
+)
+for pkg in "${packages[@]}"; do
+	if ! grep -q "\"$pkg\"" "$BUN_GLOBAL/package.json" 2>/dev/null; then
+		echo "📦 Installing $pkg with bun..."
+		bun install -g "$pkg"
+	fi
+done
 
 # Claude Code native installation
 if ! command -v claude &>/dev/null; then
