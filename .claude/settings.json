@@ -1,3 +1,10 @@
 {
-  "language": "japanese"
+  "language": "japanese",
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  }
 }
