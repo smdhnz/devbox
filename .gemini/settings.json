@@ -1,0 +1,41 @@
+{
+  "general": {
+    "preferredEditor": "nvim",
+    "previewFeatures": true,
+    "enableAutoUpdate": false,
+    "allowHomeDirectory": true,
+    "sessionRetention": {
+      "enabled": true,
+      "maxAge": "30d",
+      "warningAcknowledged": true
+    },
+    "plan": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "theme": "Atom One",
+    "showStatusInTitle": true,
+    "hideTips": true,
+    "hideBanner": true,
+    "useAlternateBuffer": false
+  },
+  "privacy": {
+    "usageStatisticsEnabled": false
+  },
+  "context": {
+    "fileName": ["AGENTS.md", "GEMINI.md"]
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "experimental": {
+    "enableAgents": true
+  },
+  "agents": {
+    "overrides": {}
+  },
+  "mcpServers": {}
+}

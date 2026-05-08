@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetpack-io/devbox/main/.schema/devbox.schema.json",
+  "packages": [
+    "neovim@latest",
+    "lazygit@latest",
+    "lazydocker@latest",
+    "volta@latest",
+    "bun@latest",
+    "uv@latest",
+    "shfmt@latest",
+    "ripgrep@latest",
+    "fd@latest",
+    "fzf@latest",
+    "gcc@latest",
+    "gnumake@latest",
+    "binutils@latest",
+    "gnupg@latest",
+    "jq@latest",
+    "zip@latest",
+    "unzip@latest",
+    "pkg-config@latest",
+    "zlib@latest",
+    "openssl@latest",
+    "bzip2@latest",
+    "sqlite@latest"
+  ],
+  "env": {
+    "SHELL": "/bin/bash",
+    "EDITOR": "nvim",
+    "COLORTERM": "truecolor",
+    "BUN_INSTALL": "$HOME/.bun",
+    "VOLTA_HOME": "$HOME/.volta"
+  },
+  "shell": {
+    "init_hook": [
+      "export PATH=\"$VOLTA_HOME/bin:$HOME/.local/bin:$BUN_INSTALL/bin:$PATH\"",
+      "export PS1='\\[\\033[01;32m\\]\\u@\\[\\033[01;35m\\]devbox\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '",
+      "source bash_aliases.sh",
+      "source bash_functions.sh",
+      "source bash_setup.sh"
+    ],
+    "scripts": {}
+  }
+}
