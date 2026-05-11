@@ -24,7 +24,10 @@
     "usageStatisticsEnabled": false
   },
   "context": {
-    "fileName": ["AGENTS.md", "GEMINI.md"]
+    "fileName": [
+      "AGENTS.md",
+      "GEMINI.md"
+    ]
   },
   "security": {
     "auth": {
