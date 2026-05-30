@@ -23,7 +23,8 @@
     "openssl@latest",
     "bzip2@latest",
     "sqlite@latest",
-    "ffmpeg@latest"
+    "ffmpeg@latest",
+    "bubblewrap@latest"
   ],
   "env": {
     "SHELL": "/bin/bash",

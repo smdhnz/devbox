@@ -36,3 +36,9 @@ if ! command -v claude &>/dev/null; then
 	echo '📦 Installing Claude Code...'
 	curl -fsSL https://claude.ai/install.sh | bash
 fi
+
+# Codex CLI installation
+if ! command -v codex &>/dev/null; then
+	echo '📦 Installing Codex CLI...'
+	curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh
+fi
