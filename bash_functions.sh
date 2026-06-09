@@ -1,31 +1,3 @@
-# Git branch synchronization
-br-sync() {
-	if ! command -v git >/dev/null 2>&1; then
-		echo "❌ git is not installed."
-		return 1
-	fi
-
-	if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-		echo "⚠️  Not inside a Git repository."
-		return 1
-	fi
-
-	if [ -z "$1" ]; then
-		local branch_name
-		branch_name=$(git rev-parse --abbrev-ref HEAD)
-		echo "==> Forcing current branch '$branch_name' to match origin/$branch_name"
-		git stash push -m "WIP: br-sync auto-stash"
-		git fetch origin
-		git reset --hard "origin/$branch_name"
-		git stash pop
-	else
-		local target_branch="$1"
-		echo "==> Forcing branch '$target_branch' to match origin/$target_branch"
-		git fetch origin
-		git branch -f "$target_branch" "origin/$target_branch"
-	fi
-}
-
 # Python virtual environment activator (using uv)
 activate() {
 	local dir="$PWD"
@@ -212,8 +184,14 @@ del() {
 }
 
 # Send message or file to Discord via Webhook
+# Requires DISCORD_WEBHOOK_URL to be set in .env or the environment.
 discord() {
-	local webhook_url="https://discord.com/api/webhooks/1430739694852898838/WoI7GIB7uM3PWTyN4FqPiBsHby_B-0RSwDRODq14Uds7FPOtJFcmW5NInOxsjVwowh8Q"
+	local webhook_url="${DISCORD_WEBHOOK_URL:-}"
+
+	if [ -z "$webhook_url" ]; then
+		echo "❌ DISCORD_WEBHOOK_URL is not set."
+		return 1
+	fi
 
 	if ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
 		echo "❌ curl and jq are required."
