@@ -255,3 +255,69 @@ clip() {
 	[ -z "$input" ] && return
 	printf "\033]52;c;$(printf "%s" "$input" | base64 | tr -d '\n')\a"
 }
+
+# Extract various archive formats
+extract() {
+	if [ $# -eq 0 ]; then
+		echo "Usage: extract <archive>"
+		return 1
+	fi
+
+	if [ ! -f "$1" ]; then
+		echo "❌ File not found: $1"
+		return 1
+	fi
+
+	case "$1" in
+	*.tar.bz2 | *.tbz2) tar xjf "$1" ;;
+	*.tar.gz | *.tgz) tar xzf "$1" ;;
+	*.tar.xz | *.txz) tar xJf "$1" ;;
+	*.tar) tar xf "$1" ;;
+	*.zip) unzip "$1" ;;
+	*.gz) gunzip "$1" ;;
+	*.bz2) bunzip2 "$1" ;;
+	*.xz) unxz "$1" ;;
+	*)
+		echo "❌ Unsupported archive: $1"
+		return 1
+		;;
+	esac
+}
+
+# Show listening ports
+ports() {
+	if command -v lsof >/dev/null 2>&1; then
+		lsof -i -P -n | grep LISTEN
+	elif command -v ss >/dev/null 2>&1; then
+		ss -ltnp
+	elif command -v netstat >/dev/null 2>&1; then
+		netstat -ltnp
+	else
+		echo "❌ lsof, ss, or netstat is required."
+		return 1
+	fi
+}
+
+# Serve current directory over HTTP
+serve() {
+	local port="${1:-8000}"
+
+	if command -v python3 >/dev/null 2>&1; then
+		python3 -m http.server "$port"
+	elif command -v python >/dev/null 2>&1; then
+		python -m SimpleHTTPServer "$port"
+	else
+		echo "❌ python3 or python is required."
+		return 1
+	fi
+}
+
+# Undo the last git commit while keeping changes staged
+gundo() {
+	if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		echo "❌ Not in a git repository"
+		return 1
+	fi
+
+	git reset --soft HEAD~1
+}
