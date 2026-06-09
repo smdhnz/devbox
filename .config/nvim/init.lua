@@ -160,11 +160,16 @@ local on_attach = function(client, bufnr)
   local buf_map = function(mode, lhs, rhs)
     vim.keymap.set(mode, lhs, rhs, { buffer = bufnr })
   end
-  buf_map("n", "F", vim.lsp.buf.hover)
+  buf_map("n", "F", function()
+    vim.lsp.buf.hover({
+      max_width = 60,
+      max_height = 15,
+    })
+  end)
   buf_map("n", "f", vim.diagnostic.open_float)
 
   -- 保存時フォーマット
-  if client.supports_method("textDocument/formatting") then
+  if client:supports_method("textDocument/formatting", bufnr) then
     vim.api.nvim_create_autocmd("BufWritePre", {
       buffer = bufnr,
       callback = function()
@@ -375,18 +380,64 @@ require("lazy").setup({
   },
 
   {
-    -- Treesitter
+    -- Treesitter (Neovim 0.12 向け新版)
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
-    dependencies = { "yioneko/nvim-yati" },
+    url = "https://github.com/neovim-treesitter/nvim-treesitter",
+    dependencies = { "neovim-treesitter/treesitter-parser-registry" },
+    lazy = false,
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "bash", "lua", "python", "typescript", "vue", "javascript", "json", "html", "css" },
-        highlight = { enable = true },
-        autotag = { enable = true },
-        indent = { enable = false },
-        yati = { enable = true },
+      local treesitter = require("nvim-treesitter")
+      treesitter.setup()
+
+      local languages = {
+        "bash",
+        "lua",
+        "python",
+        "typescript",
+        "vue",
+        "javascript",
+        "json",
+        "html",
+        "html_tags",
+        "css",
+        "ecma",
+        "jsx",
+        "tsx",
+        "markdown",
+        "markdown_inline",
+      }
+
+      local installed = {}
+      for _, lang in ipairs(treesitter.get_installed()) do
+        installed[lang] = true
+      end
+      local missing = vim.tbl_filter(function(lang)
+        return not installed[lang]
+      end, languages)
+      if #missing > 0 then
+        treesitter.install(missing)
+      end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = {
+          "sh",
+          "bash",
+          "lua",
+          "python",
+          "typescript",
+          "typescriptreact",
+          "vue",
+          "javascript",
+          "javascriptreact",
+          "json",
+          "html",
+          "css",
+          "markdown",
+        },
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
       })
     end,
   },
@@ -395,15 +446,6 @@ require("lazy").setup({
     -- LSP設定
     "neovim/nvim-lspconfig",
     config = function()
-      -- hoverの設定
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-        vim.lsp.handlers.hover,
-        {
-          max_width = 60,
-          max_height = 15,
-        }
-      )
-
       -- Diagnostic 表示設定
       vim.diagnostic.config({
         virtual_text = false,

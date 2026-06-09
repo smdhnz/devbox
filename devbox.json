@@ -17,6 +17,7 @@
     "fzf@latest",
     "gcc@latest",
     "gnumake@latest",
+    "tree-sitter@latest",
     "binutils@latest",
     "gnupg@latest",
     "jq@latest",
