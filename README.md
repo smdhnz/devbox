@@ -39,4 +39,5 @@ mkdir -p ~/.config/nvim ~/.pi/agent
 
 ln -s ~/devbox/.config/nvim/init.lua ~/.config/nvim/init.lua
 ln -s ~/devbox/.pi/agent/AGENTS.md ~/.pi/agent/AGENTS.md
+ln -s ~/devbox/.pi/agent/mcp.json ~/.pi/agent/mcp.json
 ```
