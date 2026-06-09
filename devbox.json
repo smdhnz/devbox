@@ -7,6 +7,10 @@
     "volta@latest",
     "bun@latest",
     "uv@latest",
+    "google-cloud-sdk@latest",
+    "awscli2@latest",
+    "aws-sam-cli",
+
     "shfmt@latest",
     "ripgrep@latest",
     "fd@latest",
@@ -24,7 +28,17 @@
     "bzip2@latest",
     "sqlite@latest",
     "ffmpeg@latest",
-    "bubblewrap@latest"
+    "bubblewrap@latest",
+    "libjpeg@latest",
+    "cairo@latest",
+    "pango@latest",
+    "pixman@latest",
+    "libpng@latest",
+    "giflib@latest",
+    "cairo.dev",
+    "pango.dev",
+    "libpng.dev",
+    "libjpeg.dev"
   ],
   "env": {
     "SHELL": "/bin/bash",

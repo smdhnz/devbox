@@ -35,11 +35,8 @@ devbox shell
 dotfiles (symlinks)
 
 ```bash
-mkdir -p ~/.claude ~/.gemini ~/.config/nvim
+mkdir -p ~/.config/nvim ~/.pi/agent
 
-ln -s ~/devbox/.claude/settings.json ~/.claude/settings.json
-ln -s ~/devbox/.claude/CLAUDE.md     ~/.claude/CLAUDE.md
-ln -s ~/devbox/.gemini/settings.json ~/.gemini/settings.json
-ln -s ~/devbox/.gemini/AGENTS.md     ~/.gemini/AGENTS.md
 ln -s ~/devbox/.config/nvim/init.lua ~/.config/nvim/init.lua
+ln -s ~/devbox/.pi/agent/AGENTS.md ~/.pi/agent/AGENTS.md
 ```
