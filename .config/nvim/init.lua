@@ -16,6 +16,7 @@ vim.g.maplocalleader = " "
 -- ====================
 local g = vim.g
 local opt = vim.opt
+local initial_cwd = vim.fn.getcwd()
 
 -- 表示関連
 opt.number = true
@@ -297,7 +298,10 @@ require("lazy").setup({
   {
     -- oil.nvim (テキスト編集感覚でファイル操作)
     "stevearc/oil.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "refractalize/oil-git-status.nvim",
+    },
     keys = {
       -- 現在の e キーでフローティング表示
       { "e", function() require("oil").toggle_float() end, desc = "Open oil.nvim in float" },
@@ -312,6 +316,10 @@ require("lazy").setup({
           -- "permissions",
           -- "size",
         },
+        -- oil-git-status.nvim が git status を表示するために2列分の signcolumn を確保
+        win_options = {
+          signcolumn = "yes:2",
+        },
         -- フローティングウィンドウの設定
         float = {
           padding = 2,
@@ -319,6 +327,7 @@ require("lazy").setup({
           max_height = math.floor(vim.o.lines * 0.7),  -- 画面高さの70%
           border = "rounded",
           win_options = {
+            signcolumn = "yes:2",
             winblend = 0,
           },
         },
@@ -335,6 +344,9 @@ require("lazy").setup({
           ["-"] = { "actions.parent", mode = "n" },
           ["."] = { "actions.toggle_hidden", mode = "n" },
         },
+      })
+      require("oil-git-status").setup({
+        show_ignored = false,
       })
     end,
   },
@@ -371,7 +383,19 @@ require("lazy").setup({
       sections = {
         lualine_a = { "mode" },
         lualine_b = { "branch", "diff", "diagnostics" },
-        lualine_c = { { "filename", path = 1 } },
+        lualine_c = {
+          {
+            function()
+              local filename = vim.api.nvim_buf_get_name(0)
+              if filename == "" then
+                return "[No Name]"
+              end
+
+              local relative = vim.fs.relpath(initial_cwd, filename)
+              return relative or vim.fn.fnamemodify(filename, ":~")
+            end,
+          },
+        },
         lualine_x = { "encoding", "fileformat", "filetype" },
         lualine_y = { "progress" },
         lualine_z = { "location" },
