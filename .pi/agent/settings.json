@@ -1,0 +1,13 @@
+{
+  "defaultThinkingLevel": "medium",
+  "hideThinkingBlock": true,
+  "collapseChangelog": true,
+  "treeFilterMode": "user-only",
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-intercom",
+    "npm:pi-subagents",
+    "npm:pi-mcp-adapter"
+  ],
+  "theme": "dark"
+}

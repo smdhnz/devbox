@@ -41,3 +41,9 @@ ln -s ~/devbox/.config/nvim/init.lua ~/.config/nvim/init.lua
 ln -s ~/devbox/.pi/agent/AGENTS.md ~/.pi/agent/AGENTS.md
 ln -s ~/devbox/.pi/agent/mcp.json ~/.pi/agent/mcp.json
 ```
+
+pi settings
+
+```bash
+jq -s '.[0] * .[1]' ~/.pi/agent/settings.json ~/devbox/.pi/agent/settings.json > /tmp/pi-settings.json && mv /tmp/pi-settings.json ~/.pi/agent/settings.json
+```
