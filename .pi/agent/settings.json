@@ -9,5 +9,6 @@
     "npm:pi-subagents",
     "npm:pi-mcp-adapter"
   ],
-  "theme": "dark"
+  "theme": "dark",
+  "shellCommandPrefix": "if [ -f ~/devbox/bash_functions.sh ]; then source ~/devbox/bash_functions.sh; fi"
 }
