@@ -6,11 +6,11 @@ if [ -f ".env" ]; then
 	set +a
 fi
 
-# Volta installation (node and yarn only)
-if [ ! -d "$VOLTA_HOME/tools" ]; then
-	echo '📦 Installing node and yarn with volta...'
-	volta install node@22
-	volta install yarn@1.22.22
+# mise installation (node and yarn only)
+if ! mise which node >/dev/null 2>&1; then
+	echo '📦 Installing node and yarn with mise...'
+	mise use -g node@22
+	mise use -g yarn@1.22.22
 fi
 
 # Global package installation with bun
@@ -30,3 +30,11 @@ for pkg in "${packages[@]}"; do
 		bun install -g "$pkg"
 	fi
 done
+
+# Open OAuth/login URLs in the Windows browser from WSL.
+if command -v wsl-open >/dev/null 2>&1; then
+	export BROWSER=wsl-open
+	export GH_BROWSER=wsl-open
+	mkdir -p "$HOME/.local/bin"
+	ln -sf "$(command -v wsl-open)" "$HOME/.local/bin/xdg-open"
+fi

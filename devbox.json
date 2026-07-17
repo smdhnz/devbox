@@ -4,9 +4,10 @@
     "neovim@latest",
     "lazygit@latest",
     "lazydocker@latest",
-    "volta@latest",
+    "mise@latest",
     "bun@latest",
     "uv@latest",
+    "gh@latest",
     "google-cloud-sdk@latest",
     "awscli2@latest",
     "aws-sam-cli",
@@ -45,12 +46,12 @@
     "SHELL": "/bin/bash",
     "EDITOR": "nvim",
     "COLORTERM": "truecolor",
-    "BUN_INSTALL": "$HOME/.bun",
-    "VOLTA_HOME": "$HOME/.volta"
+    "BUN_INSTALL": "$HOME/.bun"
   },
   "shell": {
     "init_hook": [
-      "export PATH=\"$VOLTA_HOME/bin:$HOME/.local/bin:$BUN_INSTALL/bin:$PATH\"",
+      "export PATH=\"$HOME/.local/bin:$BUN_INSTALL/bin:$PATH\"",
+      "eval \"$(mise activate bash)\"",
       "export PS1='\\[\\033[01;32m\\]\\u@\\[\\033[01;35m\\]devbox\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '",
       "source bash_aliases.sh",
       "source bash_functions.sh",
