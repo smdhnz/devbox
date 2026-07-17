@@ -9,7 +9,8 @@
     "npm:pi-subagents",
     "npm:pi-mcp-adapter",
     "npm:@hypabolic/pi-hypa",
-    "git:github.com/DietrichGebert/ponytail"
+    "npm:@quintinshaw/pi-dynamic-workflows",
+    "npm:@dietrichgebert/ponytail"
   ],
   "theme": "dark",
   "shellCommandPrefix": "if [ -f ~/.devbox/bash_functions.sh ]; then source ~/.devbox/bash_functions.sh; fi"
