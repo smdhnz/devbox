@@ -8,6 +8,7 @@
     "npm:pi-intercom",
     "npm:pi-subagents",
     "npm:pi-mcp-adapter",
+    "npm:@hypabolic/pi-hypa",
     "git:github.com/DietrichGebert/ponytail"
   ],
   "theme": "dark",
