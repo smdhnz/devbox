@@ -189,6 +189,8 @@ local on_attach = function(client, bufnr)
           filter = function(c)
             if vim.bo.filetype == "python" then
               return c.name == "ruff"
+            elseif vim.bo.filetype == "prisma" then
+              return c.name == "prismals"
             else
               return c.name == "null-ls"
             end
@@ -430,6 +432,7 @@ require("lazy").setup({
         "tsx",
         "markdown",
         "markdown_inline",
+        "prisma",
       }
 
       local installed = {}
@@ -458,6 +461,7 @@ require("lazy").setup({
           "html",
           "css",
           "markdown",
+          "prisma",
         },
         callback = function()
           pcall(vim.treesitter.start)
@@ -549,6 +553,17 @@ require("lazy").setup({
         },
       })
       vim.lsp.enable("vtsls")
+
+      -- Prisma
+      vim.lsp.config("prismals", {
+        on_attach = on_attach,
+        filetypes = { "prisma" },
+        root_markers = {
+          "package.json",
+          ".git",
+        },
+      })
+      vim.lsp.enable("prismals")
     end
   },
 

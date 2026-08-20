@@ -22,6 +22,7 @@ packages=(
 	@fsouza/prettierd
 	@tailwindcss/language-server
 	@earendil-works/pi-coding-agent
+	@prisma/language-server
 	wsl-open
 )
 for pkg in "${packages[@]}"; do
